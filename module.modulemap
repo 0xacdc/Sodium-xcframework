@@ -1,5 +1,5 @@
-framework module Clibsodium {
-  umbrella header "Clibsodium.h"
+framework module LibSodium {
+  umbrella header "LibSodium.h"
 
   export *
   module * { export * }
