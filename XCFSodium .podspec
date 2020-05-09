@@ -12,7 +12,7 @@ s.source = { :git => 'https://github.com/0xacdc/Sodium-xcframework.git'}
 s.ios.deployment_target = '8.0'
 s.osx.deployment_target = '10.11'
 
-s.prepare_command = 'sh build.sh'
+#s.prepare_command = 'sh build.sh'
 s.vendored_framework = 'Clibsodium.xcframework' 
 s.xcconfig = { 'BUILD_LIBRARY_FOR_DISTRIBUTION' => 'YES' }
 s.static_framework = true
