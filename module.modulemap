@@ -1,4 +1,6 @@
-module Clibsodium {
-	header "Clibsodium.h"
-	export *
+framework module Clibsodium {
+  umbrella header "Clibsodium.h"
+
+  export *
+  module * { export * }
 }
