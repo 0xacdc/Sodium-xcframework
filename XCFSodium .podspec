@@ -13,7 +13,7 @@ s.ios.deployment_target = '8.0'
 s.osx.deployment_target = '10.11'
 
 #s.prepare_command = 'sh build.sh'
-s.vendored_framework = 'libSodium.xcframework' 
+s.vendored_framework = 'LibSodium.xcframework' 
 s.xcconfig = { 'BUILD_LIBRARY_FOR_DISTRIBUTION' => 'YES' }
 s.static_framework = true
 
