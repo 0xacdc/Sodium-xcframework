@@ -3,7 +3,9 @@
 # delete previous version af xcframework
 rm -rf *.xcframework
 # read Module Name from Modulemap
-MODULE_NAME=$(sed -n -e 's/framework module\(.*\){/\1/p' module.modulemap)
+parsed=$(sed -n -e 's/framework module\(.*\){/\1/p' module.modulemap)
+# trimm Module Name
+MODULE_NAME=$(echo ${parsed} | xargs)
 
 cd libsodium
 ./autogen.sh
@@ -54,7 +56,7 @@ xcodebuild -create-xcframework \
     -framework catalyst/${FRAMEWORK_NAME} \
     -output ../../${MODULE_NAME}.xcframework
     
-rm -rf lib
+rm -rf ../libsodium-ios
 
 echo "DONE!"
 
