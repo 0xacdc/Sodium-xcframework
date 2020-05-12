@@ -20,6 +20,18 @@
 		</dict>
 		<dict>
 			<key>LibraryIdentifier</key>
+			<string>macos-x86_64</string>
+			<key>LibraryPath</key>
+			<string>Clibsodium.framework</string>
+			<key>SupportedArchitectures</key>
+			<array>
+				<string>x86_64</string>
+			</array>
+			<key>SupportedPlatform</key>
+			<string>macos</string>
+		</dict>
+		<dict>
+			<key>LibraryIdentifier</key>
 			<string>ios-i386-simulator</string>
 			<key>LibraryPath</key>
 			<string>Clibsodium.framework</string>

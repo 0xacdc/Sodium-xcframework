@@ -8,14 +8,24 @@ parsed=$(sed -n -e 's/framework module\(.*\){/\1/p' module.modulemap)
 MODULE_NAME=$(echo ${parsed} | xargs)
 
 cd libsodium
-./autogen.sh
-dist-build/ios.sh
-cd libsodium-ios
+#./autogen.sh
 
-lipo lib/libsodium.a -thin i386 -output libsodium-sim.a
-lipo lib/libsodium.a -thin x86_64 -output libsodium-catalyst.a
-lipo -remove i386 lib/libsodium.a -o libsodium-ios.a
-lipo -remove x86_64 libsodium-ios.a -o libsodium-ios.a
+#dist-build/ios.sh
+#dist-build/osx.sh
+
+
+rm -rf tmp_xcframework
+mkdir tmp_xcframework
+
+lipo libsodium-ios/lib/libsodium.a -thin i386 -output tmp_xcframework/libsodium-sim.a
+lipo libsodium-ios/lib/libsodium.a -thin x86_64 -output tmp_xcframework/libsodium-catalyst.a
+lipo -remove i386 libsodium-ios/lib/libsodium.a -o tmp_xcframework/libsodium-ios.a
+lipo -remove x86_64 tmp_xcframework/libsodium-ios.a -o tmp_xcframework/libsodium-ios.a
+
+cp libsodium-osx/lib/libsodium.a tmp_xcframework/libsodium-osx.a
+cp -r libsodium-ios/include tmp_xcframework/include
+
+cd tmp_xcframework
 
 function create_framework () {
     FRAMEWORK_NAME="${MODULE_NAME}.framework"
@@ -54,9 +64,12 @@ xcodebuild -create-xcframework \
     -framework ios/${FRAMEWORK_NAME} \
     -framework sim/${FRAMEWORK_NAME} \
     -framework catalyst/${FRAMEWORK_NAME} \
+    -framework osx/${FRAMEWORK_NAME} \
     -output ../../${MODULE_NAME}.xcframework
     
-rm -rf ../libsodium-ios
+#rm -rf ../libsodium-ios
+#rm -rf ../libsodium-osx
+#rm -rf ../tmp_xcframework
 
 echo "DONE!"
 
