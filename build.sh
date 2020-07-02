@@ -7,10 +7,14 @@ parsed=$(sed -n -e 's/framework module\(.*\){/\1/p' module.modulemap)
 # trimm Module Name
 MODULE_NAME=$(echo ${parsed} | xargs)
 
+cp simulator.sh libsodium/dist-build
+chmod +x libsodium/dist-build/simulator.sh
+
 cd libsodium
 ./autogen.sh
 
 # Run Build Scripts
+dist-build/simulator.sh
 dist-build/ios.sh
 dist-build/osx.sh
 dist-build/watchos.sh
@@ -20,7 +24,6 @@ rm -rf tmp_xcframework
 mkdir tmp_xcframework
 
 # Separate iOS platforms
-lipo libsodium-ios/lib/libsodium.a -thin i386 -output tmp_xcframework/libsodium-sim.a
 lipo libsodium-ios/lib/libsodium.a -thin x86_64 -output tmp_xcframework/libsodium-catalyst.a
 lipo -remove i386 libsodium-ios/lib/libsodium.a -o tmp_xcframework/libsodium-ios.a
 lipo -remove x86_64 tmp_xcframework/libsodium-ios.a -o tmp_xcframework/libsodium-ios.a
@@ -33,6 +36,9 @@ lipo -remove x86_64 tmp_xcframework/libsodium-watchos.a -o tmp_xcframework/libso
 
 #Copy OSX Platform
 cp libsodium-osx/lib/libsodium.a tmp_xcframework/libsodium-osx.a
+
+#Copy Simulator Platform
+cp libsodium-simulator/lib/libsodium.a tmp_xcframework/libsodium-sim.a
 
 cd tmp_xcframework
 
@@ -61,6 +67,9 @@ function create_framework () {
          watchos)
               cp -r ../libsodium-watchos/include/* "$1/${FRAMEWORK_NAME}/Versions/A/Headers"
               ;;
+         sim)
+              cp -r ../libsodium-ios/include/* "$1/${FRAMEWORK_NAME}/Versions/A/Headers"
+              ;;
          *)
               cp -r ../libsodium-ios/include/* "$1/${FRAMEWORK_NAME}/Versions/A/Headers"
               ;;
@@ -88,6 +97,7 @@ xcodebuild -create-xcframework \
     -output ../../${MODULE_NAME}.xcframework
     
 rm -rf ../libsodium-ios
+rm -rf ../libsodium-simulator
 rm -rf ../libsodium-osx
 rm -rf ../libsodium-watchos
 rm -rf ../tmp_xcframework
